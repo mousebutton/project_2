@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class KoffieappApplication {
 
 	public static void main(String[] args) {
-		System.out.println("hallo");
 		SpringApplication.run(KoffieappApplication.class, args);
 	}
 }
