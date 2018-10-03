@@ -51,4 +51,8 @@ public class UserController {
         return userService.whoAmI(request);
     }
 
+    @PutMapping("/user")
+    public User update(@RequestBody User user) {
+        return userService.update(user);
+    }
 }

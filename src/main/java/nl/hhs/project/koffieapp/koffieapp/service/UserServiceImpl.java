@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService{
     PasswordEncoder passwordEncoder;
 
 
+
     /**
      * Handle login request and set the user in the security context.
      * @param user
@@ -90,6 +91,14 @@ public class UserServiceImpl implements UserService{
                         .getUsername(jwtTokenProvider
                         .resolveToken(request)))
                         .get();
+    }
+
+    @Override
+    public User update(User user) {
+        User toUpdate = userRepository.getOne(user.getId());
+        toUpdate.setFirstName(user.getFirstName());
+        toUpdate.setLastName(user.getLastName());
+        return userRepository.save(toUpdate);
     }
 
 }

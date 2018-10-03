@@ -10,4 +10,5 @@ public interface UserService {
     boolean register(User user);
     void delete(User user);
     User whoAmI(HttpServletRequest request);
+    User update(User user);
 }
