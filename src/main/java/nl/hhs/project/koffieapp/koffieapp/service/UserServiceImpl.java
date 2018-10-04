@@ -3,12 +3,11 @@ package nl.hhs.project.koffieapp.koffieapp.service;
 import nl.hhs.project.koffieapp.koffieapp.exception.AppException;
 import nl.hhs.project.koffieapp.koffieapp.model.Role;
 import nl.hhs.project.koffieapp.koffieapp.model.User;
-import nl.hhs.project.koffieapp.koffieapp.model.payload.JwtAuthenticationResponse;
 import nl.hhs.project.koffieapp.koffieapp.repository.RoleRepository;
 import nl.hhs.project.koffieapp.koffieapp.repository.UserRepository;
 import nl.hhs.project.koffieapp.koffieapp.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,7 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.OneToMany;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Optional;
@@ -35,6 +33,9 @@ public class UserServiceImpl implements UserService{
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    // We will use this template to send push notifications to the Clients
+    @Autowired
+    private SimpMessagingTemplate template;
 
 
     /**
@@ -79,26 +80,39 @@ public class UserServiceImpl implements UserService{
         return true;
     }
 
-    @Override
-    public void delete(User user) {
-       userRepository.delete(user);
-    }
-
+    /**
+     * Return User based on the security token
+     * @param request
+     * @return User
+     */
     @Override
     public User whoAmI(HttpServletRequest request) {
         return userRepository.findUserByEmail(
                 jwtTokenProvider
-                        .getUsername(jwtTokenProvider
-                        .resolveToken(request)))
+                        .getUsername(jwtTokenProvider.resolveToken(request)))
                         .get();
     }
 
+    /**
+     * Update the User details
+     * @param user
+     * @return updated User
+     */
     @Override
     public User update(User user) {
         User toUpdate = userRepository.getOne(user.getId());
         toUpdate.setFirstName(user.getFirstName());
         toUpdate.setLastName(user.getLastName());
         return userRepository.save(toUpdate);
+    }
+
+    /**
+     * When a user comes online, notify the other users.
+     * All Clients should be subscribed to this channel.
+     */
+    @Override
+    public void pushNewUserOnlineNotification(User user) {
+        template.convertAndSend("/global-message/user", user.getEmail() + " is online");
     }
 
 }
