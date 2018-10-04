@@ -1,4 +1,4 @@
-package nl.hhs.project.koffieapp.koffieapp.controller;
+package nl.hhs.project.koffieapp.koffieapp.controller.rest;
 
 import nl.hhs.project.koffieapp.koffieapp.model.User;
 import nl.hhs.project.koffieapp.koffieapp.model.payload.ApiResponse;
@@ -7,6 +7,7 @@ import nl.hhs.project.koffieapp.koffieapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +23,12 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody User user, HttpServletRequest request) {
-        CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
-        System.out.println(token);
+    public ResponseEntity<?> authenticateUser(@RequestBody User user) {
         String jwtToken = userService.login(user);
         if (!StringUtils.hasText(jwtToken)) {
             return ResponseEntity.badRequest().build();
         }
-
+        userService.pushNewUserOnlineNotification(user);
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken));
     }
 
@@ -40,4 +39,5 @@ public class AuthController {
         }
         return ResponseEntity.badRequest().build();
     }
+
 }

@@ -1,4 +1,4 @@
-package nl.hhs.project.koffieapp.koffieapp.controller;
+package nl.hhs.project.koffieapp.koffieapp.controller.rest;
 
 import nl.hhs.project.koffieapp.koffieapp.model.User;
 import nl.hhs.project.koffieapp.koffieapp.repository.UserRepository;
@@ -33,7 +33,7 @@ public class UserController {
         return userRepository.findById(id);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping(value = "/user")
     public String getUser() {
         return "welcome user";

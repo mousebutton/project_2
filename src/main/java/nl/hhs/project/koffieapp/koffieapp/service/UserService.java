@@ -8,6 +8,6 @@ public interface UserService {
 
     String login(User user);
     boolean register(User user);
-    void delete(User user);
     User whoAmI(HttpServletRequest request);
+    void pushNewUserOnlineNotification(User user);
 }

@@ -9,6 +9,7 @@ import nl.hhs.project.koffieapp.koffieapp.repository.UserRepository;
 import nl.hhs.project.koffieapp.koffieapp.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,6 +35,10 @@ public class UserServiceImpl implements UserService{
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    // We will use this template to send push notifications to the Clients
+    @Autowired
+    private SimpMessagingTemplate template;
 
 
     /**
@@ -78,18 +83,26 @@ public class UserServiceImpl implements UserService{
         return true;
     }
 
-    @Override
-    public void delete(User user) {
-       userRepository.delete(user);
-    }
-
+    /**
+     * Return User based on the security token
+     * @param request
+     * @return User
+     */
     @Override
     public User whoAmI(HttpServletRequest request) {
         return userRepository.findUserByEmail(
                 jwtTokenProvider
-                        .getUsername(jwtTokenProvider
-                        .resolveToken(request)))
+                        .getUsername(jwtTokenProvider.resolveToken(request)))
                         .get();
+    }
+
+    /**
+     * When a user comes online, notify the other users.
+     * All Clients should be subscribed to this channel.
+     */
+    @Override
+    public void pushNewUserOnlineNotification(User user) {
+        template.convertAndSend("/global-message/user", user.getEmail() + " is online");
     }
 
 }
