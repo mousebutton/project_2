@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService{
     @Autowired
     PasswordEncoder passwordEncoder;
 
+
     // We will use this template to send push notifications to the Clients
     @Autowired
     private SimpMessagingTemplate template;
@@ -40,13 +42,14 @@ public class UserServiceImpl implements UserService{
 
     /**
      * Handle login request and set the user in the security context.
+     *
      * @param user
      * @return Jwt token
      */
     @Override
-    public String login(User user){
+    public String login(User user) {
         Optional<User> byEmail = userRepository.findUserByEmail(user.getEmail());
-        if(byEmail != null){
+        if (byEmail != null) {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
 
@@ -61,12 +64,13 @@ public class UserServiceImpl implements UserService{
      * Validate new user registration.
      * If the email already exists return false
      * Else register the user and encrypt the password.
+     *
      * @param user
      * @return boolean result of the registration request
      */
     @Override
-    public boolean register(User user){
-        if(userRepository.existsByEmail(user.getEmail())) {
+    public boolean register(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
             return false;
         }
         User newUser = new User(user);
@@ -82,6 +86,7 @@ public class UserServiceImpl implements UserService{
 
     /**
      * Return User based on the security token
+     *
      * @param request
      * @return User
      */
@@ -95,6 +100,7 @@ public class UserServiceImpl implements UserService{
 
     /**
      * Update the User details
+     *
      * @param user
      * @return updated User
      */
@@ -106,6 +112,13 @@ public class UserServiceImpl implements UserService{
         return userRepository.save(toUpdate);
     }
 
+    @Override
+    public void updateAvatar(Long id, byte[] avatar) {
+        User user = userRepository.getOne(id);
+        user.setAvatar(avatar);
+        userRepository.save(user);
+    }
+
     /**
      * When a user comes online, notify the other users.
      * All Clients should be subscribed to this channel.
@@ -114,5 +127,6 @@ public class UserServiceImpl implements UserService{
     public void pushNewUserOnlineNotification(User user) {
         template.convertAndSend("/global-message/user", user.getEmail() + " is online");
     }
+
 
 }

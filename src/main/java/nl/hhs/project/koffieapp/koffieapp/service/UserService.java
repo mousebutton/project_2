@@ -11,4 +11,5 @@ public interface UserService {
     User whoAmI(HttpServletRequest request);
     void pushNewUserOnlineNotification(User user);
     User update(User user);
+    void updateAvatar(Long id, byte[] avatar);
 }
