@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
  */
 
 @Controller
-public class ChatMessageController {
+public class ChatMessageEndpoint {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
