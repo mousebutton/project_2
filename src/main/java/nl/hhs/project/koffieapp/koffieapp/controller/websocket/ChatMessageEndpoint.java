@@ -1,15 +1,11 @@
 package nl.hhs.project.koffieapp.koffieapp.controller.websocket;
 
-import nl.hhs.project.koffieapp.koffieapp.model.User;
 import nl.hhs.project.koffieapp.koffieapp.security.JwtTokenProvider;
-import nl.hhs.project.koffieapp.koffieapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Endpoints for the Websocket listener.
@@ -33,7 +29,7 @@ public class ChatMessageController {
     @MessageMapping("chat-message")
     public String sendChatMessage(String content) throws Exception {
         Thread.sleep(1000);
-        String[] data = content.split("-");
+        String[] data = content.split("%");
         String token = data[1];
         String userName = jwtTokenProvider.getUsername(token);
         return userName + ": " + data[0];
