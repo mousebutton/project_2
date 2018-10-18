@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
-import java.util.Base64;
 
 @RestController
 @RequestMapping("api/users")
@@ -55,10 +54,7 @@ public class UserController {
     }
 
     @PostMapping("/avatar")
-    public void test(@RequestBody String imageData) {
-        String[] data = imageData.split(",");
-        String base64 = "data:image/jpeg;base64," + data[6].substring(0, data[6].length()-1);
-        Long id = Long.valueOf(data[0].substring(data[0].length()-1));
-        userService.updateAvatar(id, base64.getBytes());
+    public User uploadNewAvatar(@RequestBody User user) {
+        return userService.updateAvatar(user);
     }
 }

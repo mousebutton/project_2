@@ -9,7 +9,8 @@ public interface UserService {
     String login(User user);
     boolean register(User user);
     User whoAmI(HttpServletRequest request);
+    User whoAmI(String jwtToken);
     void pushNewUserOnlineNotification(User user);
     User update(User user);
-    void updateAvatar(Long id, byte[] avatar);
+    User updateAvatar(User user);
 }

@@ -93,9 +93,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User whoAmI(HttpServletRequest request) {
         return userRepository.findUserByEmail(
-                jwtTokenProvider
-                        .getUsername(jwtTokenProvider.resolveToken(request)))
-                        .get();
+                jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request))).get();
+    }
+
+    @Override
+    public User whoAmI(String jwtToken) {
+        String email = jwtTokenProvider.getUsername(jwtToken);
+        System.out.println(email);
+        return userRepository.findUserByEmail(jwtTokenProvider.getUsername(jwtToken)).get();
     }
 
     /**
@@ -113,10 +118,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateAvatar(Long id, byte[] avatar) {
-        User user = userRepository.getOne(id);
-        user.setAvatar(avatar);
-        userRepository.save(user);
+    public User updateAvatar(User user) {
+        User toUpdate = userRepository.getOne(user.getId());
+        toUpdate.setAvatar(user.getAvatar());
+        return userRepository.save(toUpdate);
     }
 
     /**

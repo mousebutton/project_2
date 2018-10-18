@@ -10,18 +10,22 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class CoffeeGroup {
+public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "group_id")
+    @Column(name = "department_id")
     @JsonIgnore
     private long id;
 
     private String name;
 
-    @ManyToMany(mappedBy = "coffeeGroups")
+    @ManyToMany(mappedBy = "departments")
     @JsonIgnore
     private List<User> users;
+
+    public Department(String name){
+        this.name = name;
+    }
 
 }

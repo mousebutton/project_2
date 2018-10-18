@@ -24,7 +24,8 @@ public class AuthController {
             return ResponseEntity.badRequest().build();
         }
         userService.pushNewUserOnlineNotification(user);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken));
+        return ResponseEntity.ok(
+                new JwtAuthenticationResponse(userService.whoAmI(jwtToken), jwtToken));
     }
 
     @PostMapping("/register")

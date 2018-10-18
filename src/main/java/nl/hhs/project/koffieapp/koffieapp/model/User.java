@@ -20,16 +20,16 @@ public class User {
     private String firstName;
     private String lastName;
     @Lob
-    private byte[] avatar;
+    private String avatar;
 
     @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Role> roles;
 
     @ManyToMany
-    @JoinTable(name = "coffee_group_users",
+    @JoinTable(name = "department_users",
             joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "group_id")})
-    private List<CoffeeGroup> coffeeGroups;
+            inverseJoinColumns = {@JoinColumn(name = "department_id")})
+    private List<Department> departments;
 
     public User(User byEMail){
         this.id = byEMail.getId();
