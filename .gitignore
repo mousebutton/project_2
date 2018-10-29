@@ -12,10 +12,11 @@
 
 ### IntelliJ IDEA ###
 .idea
+.resources
 *.iws
 *.iml
 *.ipr
-application.properties
+
 
 ### NetBeans ###
 /nbproject/private/

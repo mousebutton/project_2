@@ -15,7 +15,6 @@ public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "department_id")
-    @JsonIgnore
     private long id;
 
     private String name;
@@ -24,8 +23,5 @@ public class Department {
     @JsonIgnore
     private List<User> users;
 
-    public Department(String name){
-        this.name = name;
-    }
 
 }
