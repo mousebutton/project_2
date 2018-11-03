@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private String SECRET = "secret";
-    private final long tokenExpiresInMS = 3_600_000; // 1 hour
+    private final long tokenExpiresInMS = 86_400_000; // 1 day
 
     @PostConstruct
     protected void init() {

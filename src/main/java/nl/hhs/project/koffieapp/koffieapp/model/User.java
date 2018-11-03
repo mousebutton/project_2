@@ -1,5 +1,6 @@
 package nl.hhs.project.koffieapp.koffieapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,16 +23,15 @@ public class User {
     @Lob
     private String avatar;
 
-    @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Role> roles;
 
-    @ManyToMany
-    @JoinTable(name = "department_users",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "department_id")})
-    private List<Department> departments;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_FK")
+    @JsonBackReference
+    private Department department;
 
-    public User(User byEMail){
+    public User(User byEMail) {
         this.id = byEMail.getId();
         this.email = byEMail.getEmail();
         this.password = byEMail.getPassword();

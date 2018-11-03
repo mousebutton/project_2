@@ -1,6 +1,6 @@
 package nl.hhs.project.koffieapp.koffieapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,8 +19,10 @@ public class Department {
 
     private String name;
 
-    @ManyToMany(mappedBy = "departments")
-    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            mappedBy = "department")
+    @JsonManagedReference
     private List<User> users;
 
 

@@ -16,10 +16,10 @@ import java.util.Optional;
  */
 
 @RestController
-@RequestMapping("api/admin")
+@RequestMapping("api/admin/departments")
 @CrossOrigin(origins = "http://localhost:4200")
 @PreAuthorize("hasRole('ADMIN')")
-public class AdminController {
+public class DepartmentController {
 
     @Autowired
     private UserRepository userRepository;
@@ -32,13 +32,21 @@ public class AdminController {
         return userRepository.findAll();
     }
 
-    @GetMapping(value = "/user/{id}")
-    public Optional<User> findUserById(@PathVariable(value = "id") final Long id) {
-        return userRepository.findById(id);
-    }
-
-    @GetMapping("/departments")
+    @GetMapping("/all")
     public List<Department> findAll() {
         return departmentRepository.findAll();
+    }
+
+    @GetMapping("/addUser")
+    public void addUserToDepartment(@RequestParam(value = "email", required = false) final String email) {
+        Optional<User> user = userRepository.findUserByEmail(email);
+        userRepository.save(user.get());
+    }
+
+    @DeleteMapping("/deleteUser")
+    public void deleteUserFromDepartment(@RequestParam(value = "user") final Long userId) {
+        User user = userRepository.getOne(userId);
+        user.setDepartment(null);
+        userRepository.save(user);
     }
 }
