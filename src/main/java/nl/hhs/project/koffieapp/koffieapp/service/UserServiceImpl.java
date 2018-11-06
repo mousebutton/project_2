@@ -3,6 +3,7 @@ package nl.hhs.project.koffieapp.koffieapp.service;
 import nl.hhs.project.koffieapp.koffieapp.exception.AppException;
 import nl.hhs.project.koffieapp.koffieapp.model.Role;
 import nl.hhs.project.koffieapp.koffieapp.model.User;
+import nl.hhs.project.koffieapp.koffieapp.model.UserDTO;
 import nl.hhs.project.koffieapp.koffieapp.repository.RoleRepository;
 import nl.hhs.project.koffieapp.koffieapp.repository.UserRepository;
 import nl.hhs.project.koffieapp.koffieapp.security.JwtTokenProvider;
@@ -74,6 +75,7 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         User newUser = new User(user);
+        System.out.println(user);
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Role userRole = roleRepository.findByRole("USER")
@@ -91,36 +93,35 @@ public class UserServiceImpl implements UserService {
      * @return User
      */
     @Override
-    public User whoAmI(HttpServletRequest request) {
-        return userRepository.findUserByEmail(
-                jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request))).get();
+    public UserDTO whoAmI(HttpServletRequest request) {
+        User user = userRepository.findUserByEmail(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request))).get();
+        return new UserDTO(user);
     }
 
     @Override
-    public User whoAmI(String jwtToken) {
-        String email = jwtTokenProvider.getUsername(jwtToken);
-        System.out.println(email);
-        return userRepository.findUserByEmail(jwtTokenProvider.getUsername(jwtToken)).get();
+    public UserDTO whoAmI(String jwtToken) {
+        User user = userRepository.findUserByEmail(jwtTokenProvider.getUsername(jwtToken)).get();
+        return new UserDTO(user);
     }
 
     /**
      * Update the User details
      *
-     * @param user
+     * @param userDTO
      * @return updated User
      */
     @Override
-    public User update(User user) {
-        User toUpdate = userRepository.getOne(user.getId());
-        toUpdate.setFirstName(user.getFirstName());
-        toUpdate.setLastName(user.getLastName());
+    public User update(UserDTO userDTO) {
+        User toUpdate = userRepository.getOne(userDTO.getId());
+        toUpdate.setFirstName(userDTO.getFirstName());
+        toUpdate.setLastName(userDTO.getLastName());
         return userRepository.save(toUpdate);
     }
 
     @Override
-    public User updateAvatar(User user) {
-        User toUpdate = userRepository.getOne(user.getId());
-        toUpdate.setAvatar(user.getAvatar());
+    public User updateAvatar(UserDTO userDTO) {
+        User toUpdate = userRepository.getOne(userDTO.getId());
+        toUpdate.setAvatar(userDTO.getAvatar());
         return userRepository.save(toUpdate);
     }
 
@@ -128,6 +129,7 @@ public class UserServiceImpl implements UserService {
      * When a user comes online, notify the other users.
      * All Clients should be subscribed to this channel.
      */
+    //TODO change so only users from the same department will receive the messages
     @Override
     public void pushNewUserOnlineNotification(User user) {
         template.convertAndSend("/global-message/user", user.getEmail() + " is online");

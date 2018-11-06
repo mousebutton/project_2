@@ -1,10 +1,13 @@
 package nl.hhs.project.koffieapp.koffieapp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.hhs.project.koffieapp.koffieapp.model.Canvas.Chair;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,6 +33,8 @@ public class User {
     @JoinColumn(name = "department_FK")
     @JsonBackReference
     private Department department;
+
+    private long departmentId;
 
     public User(User byEMail) {
         this.id = byEMail.getId();

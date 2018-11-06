@@ -3,6 +3,7 @@ package nl.hhs.project.koffieapp.koffieapp.model.payload;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import nl.hhs.project.koffieapp.koffieapp.model.User;
+import nl.hhs.project.koffieapp.koffieapp.model.UserDTO;
 import nl.hhs.project.koffieapp.koffieapp.service.UserService;
 import nl.hhs.project.koffieapp.koffieapp.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,11 @@ public class JwtAuthenticationResponse {
     @Autowired
     private UserService userService = new UserServiceImpl();
 
-    private User user;
+    private UserDTO user;
     private String accessToken;
     private String tokenType = "Bearer";
 
-    public JwtAuthenticationResponse(User user, String accessToken){
+    public JwtAuthenticationResponse(UserDTO user, String accessToken){
         this.user = user;
         this.accessToken = accessToken;
     }

@@ -5,6 +5,8 @@ import nl.hhs.project.koffieapp.koffieapp.model.User;
 import nl.hhs.project.koffieapp.koffieapp.repository.DepartmentRepository;
 import nl.hhs.project.koffieapp.koffieapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +20,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/admin/departments")
 @CrossOrigin(origins = "http://localhost:4200")
-@PreAuthorize("hasRole('ADMIN')")
+//@PreAuthorize("hasRole('ADMIN')")
 public class DepartmentController {
 
     @Autowired
@@ -34,19 +36,38 @@ public class DepartmentController {
 
     @GetMapping("/all")
     public List<Department> findAll() {
+
         return departmentRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Optional<Department> findById(@PathVariable(value = "id") final long id){
+        return departmentRepository.findById(id);
+    }
+
     @GetMapping("/addUser")
-    public void addUserToDepartment(@RequestParam(value = "email", required = false) final String email) {
-        Optional<User> user = userRepository.findUserByEmail(email);
-        userRepository.save(user.get());
+    public ResponseEntity<String> addUserToDepartment(
+            @RequestParam(value = "email") final String email,
+            @RequestParam(value = "department") final long departmentId) {
+
+        Optional<User> optional = userRepository.findUserByEmail(email);
+        optional.ifPresent(user -> {
+                    Department department = departmentRepository.getOne(departmentId);
+                    user.setDepartment(department);
+
+                    userRepository.save(user);
+                }
+        );
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteUser")
-    public void deleteUserFromDepartment(@RequestParam(value = "user") final Long userId) {
+    public ResponseEntity<String> deleteUserFromDepartment(
+            @RequestParam(value = "user") final Long userId) {
+
         User user = userRepository.getOne(userId);
         user.setDepartment(null);
         userRepository.save(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
