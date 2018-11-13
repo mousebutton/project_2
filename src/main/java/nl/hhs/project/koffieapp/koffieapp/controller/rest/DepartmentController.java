@@ -20,7 +20,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/admin/departments")
 @CrossOrigin(origins = "http://localhost:4200")
-//@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN')")
 public class DepartmentController {
 
     @Autowired
@@ -29,6 +29,10 @@ public class DepartmentController {
     @Autowired
     private DepartmentRepository departmentRepository;
 
+    /**
+     * Only get users that are not in a department
+     * @return
+     */
     @GetMapping(value = "/users")
     public List<User> findAllUsers() {
         return userRepository.findAll();
@@ -40,9 +44,10 @@ public class DepartmentController {
         return departmentRepository.findAll();
     }
 
-    @GetMapping("/{id}")
-    public Optional<Department> findById(@PathVariable(value = "id") final long id){
-        return departmentRepository.findById(id);
+    @PostMapping("/add")
+    public Department addDepartment(
+            @RequestParam(value = "departmentName", required = false) final String departmentName) {
+        return departmentRepository.save(new Department(departmentName));
     }
 
     @GetMapping("/addUser")
@@ -54,7 +59,6 @@ public class DepartmentController {
         optional.ifPresent(user -> {
                     Department department = departmentRepository.getOne(departmentId);
                     user.setDepartment(department);
-
                     userRepository.save(user);
                 }
         );
@@ -68,6 +72,14 @@ public class DepartmentController {
         User user = userRepository.getOne(userId);
         user.setDepartment(null);
         userRepository.save(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteDepartment(
+            @PathVariable(value = "id") final long id){
+
+        departmentRepository.delete(departmentRepository.getOne(id));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

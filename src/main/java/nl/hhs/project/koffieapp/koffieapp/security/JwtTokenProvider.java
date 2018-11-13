@@ -6,12 +6,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import nl.hhs.project.koffieapp.koffieapp.exception.CustomJwtException;
 import nl.hhs.project.koffieapp.koffieapp.model.Role;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -48,7 +44,6 @@ public class JwtTokenProvider {
                 .collect(Collectors.toList()));
         Date now = new Date();
         Date validTill = new Date(now.getTime() + tokenExpiresInMS);
-
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)

@@ -19,14 +19,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private long id;
+
     private String email;
+
     private String password;
+
     private String firstName;
+
     private String lastName;
+
     @Lob
     private String avatar;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -20,6 +20,10 @@ public class Canvas {
     @OneToOne
     private Department department;
 
+    @OneToOne
+    private CoffeeMachine coffeeMachine;
+
     @OneToMany
     private List<Chair> chairs;
+
 }

@@ -10,15 +10,8 @@ import javax.validation.constraints.Null;
 @Entity
 @Data
 @NoArgsConstructor
-public class Chair {
+public class Chair extends CanvasObject {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "chair_id")
-    private long id;
-    private int topPos;
-    private int leftPos;
-    private int rotation;
     @OneToOne
     @Null
     private User user;

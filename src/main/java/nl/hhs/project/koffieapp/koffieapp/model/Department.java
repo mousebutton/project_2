@@ -7,6 +7,7 @@ import nl.hhs.project.koffieapp.koffieapp.model.Canvas.Canvas;
 
 import javax.persistence.*;
 import javax.validation.constraints.Null;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,11 +22,14 @@ public class Department {
 
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            mappedBy = "department")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "department")
     @JsonManagedReference
     private List<User> users;
+
+    public Department(String name) {
+        this.name = name;
+        this.users = new ArrayList<>();
+    }
 
 
 }
