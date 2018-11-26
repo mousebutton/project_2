@@ -31,6 +31,12 @@ public class UserController {
         return new UserDTO(userService.update(userDTO));
     }
 
+    @GetMapping("/order")
+    public String addOrder() {
+        //return orderRepository.addOrder(int userId);
+        return null;
+    }
+
     @PostMapping("/avatar")
     public UserDTO uploadNewAvatar(@RequestBody UserDTO userDTO) {
         return new UserDTO(userService.updateAvatar(userDTO));
