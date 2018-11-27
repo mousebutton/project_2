@@ -17,6 +17,8 @@ public class Canvas {
     @Column(name = "canvas_id")
     private long id;
 
+    private String description;
+
     @OneToOne
     private Department department;
 

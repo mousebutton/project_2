@@ -25,7 +25,6 @@ public class DrinkController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/add")
     public Drink addDrink(@RequestBody final Drink drink){
-        System.out.println(drink);
         return drinkRepository.save(drink);
     }
 }

@@ -2,6 +2,7 @@ package nl.hhs.project.koffieapp.koffieapp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.hhs.project.koffieapp.koffieapp.model.Canvas.Chair;

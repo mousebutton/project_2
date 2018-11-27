@@ -3,6 +3,7 @@ package nl.hhs.project.koffieapp.koffieapp.model.Canvas;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.hhs.project.koffieapp.koffieapp.model.User;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import javax.validation.constraints.Null;

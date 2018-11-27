@@ -34,5 +34,12 @@ public class ChatMessageEndpoint {
         return userName + ": " + data[0];
     }
 
+    @SendTo("/global-message/notification")
+    @MessageMapping("coffee-order")
+    public String newCoffeeOrder(String content) throws Exception {
+        Thread.sleep(1000);
+
+        return "";
+    }
 
 }
