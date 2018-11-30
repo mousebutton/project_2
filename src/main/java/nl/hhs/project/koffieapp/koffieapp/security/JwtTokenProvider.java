@@ -37,13 +37,16 @@ public class JwtTokenProvider {
      * @return Jwt Token (String)
      */
     public String createToken(String email, List<Role> roles) {
+
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("auth", roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRole()))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList()));
+
         Date now = new Date();
         Date validTill = new Date(now.getTime() + tokenExpiresInMS);
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)

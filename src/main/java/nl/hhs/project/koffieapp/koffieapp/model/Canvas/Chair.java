@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.hhs.project.koffieapp.koffieapp.model.User;
 import org.hibernate.annotations.Fetch;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.Null;
@@ -14,7 +15,7 @@ import javax.validation.constraints.Null;
 public class Chair extends CanvasObject {
 
     @OneToOne
-    @Null
+    @Nullable
     private User user;
 
 }

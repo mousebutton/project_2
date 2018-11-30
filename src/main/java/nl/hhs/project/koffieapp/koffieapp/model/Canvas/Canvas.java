@@ -1,5 +1,6 @@
 package nl.hhs.project.koffieapp.koffieapp.model.Canvas;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.hhs.project.koffieapp.koffieapp.model.Department;
@@ -7,8 +8,10 @@ import nl.hhs.project.koffieapp.koffieapp.model.Department;
 import javax.persistence.*;
 import java.util.List;
 
+
 @Entity
 @Data
+@JsonSerialize
 @NoArgsConstructor
 public class Canvas {
 
@@ -27,5 +30,15 @@ public class Canvas {
 
     @OneToMany
     private List<Chair> chairs;
+
+    public void addChair(Chair chair) {
+        chairs.add(chair);
+    }
+
+    public void removeChair(Chair chair) {
+        chairs.remove(chair);
+    }
+
+
 
 }

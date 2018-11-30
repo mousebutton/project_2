@@ -1,13 +1,17 @@
 package nl.hhs.project.koffieapp.koffieapp.controller.rest;
 
 import nl.hhs.project.koffieapp.koffieapp.model.Canvas.Canvas;
+import nl.hhs.project.koffieapp.koffieapp.model.Canvas.Chair;
 import nl.hhs.project.koffieapp.koffieapp.model.Department;
+import nl.hhs.project.koffieapp.koffieapp.model.payload.ApiResponse;
 import nl.hhs.project.koffieapp.koffieapp.repository.CanvasRepository;
 import nl.hhs.project.koffieapp.koffieapp.repository.DepartmentRepository;
+import nl.hhs.project.koffieapp.koffieapp.service.CanvasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +25,9 @@ public class CanvasController {
 
     @Autowired
     private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private CanvasService canvasService;
 
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -67,7 +74,14 @@ public class CanvasController {
      */
     @GetMapping("/department/{department}")
     public Canvas findByDepartmentName(@PathVariable(value = "department") final String department) {
-        return canvasRepository.findByDepartment_Name(department);
+
+        return  canvasRepository.findByDepartment_Name(department);
+    }
+
+    @PutMapping("/update")
+    public ApiResponse update(@RequestBody final Canvas canvas) {
+
+        return canvasService.update(canvas);
     }
 
     @PostMapping("/new")
