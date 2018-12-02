@@ -16,7 +16,7 @@ public class DrinkController {
     @Autowired
     private DrinkRepository drinkRepository;
 
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+//    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping(value = "/all")
     public List<Drink> findAllDrinks(){
         return drinkRepository.findAllByOrderByNameAsc();

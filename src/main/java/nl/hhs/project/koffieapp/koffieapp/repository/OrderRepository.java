@@ -1,13 +1,9 @@
 package nl.hhs.project.koffieapp.koffieapp.repository;
 
-import nl.hhs.project.koffieapp.koffieapp.model.Drink;
-import nl.hhs.project.koffieapp.koffieapp.model.Order;
+import nl.hhs.project.koffieapp.koffieapp.model.CoffeeOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.Optional;
+public interface OrderRepository extends JpaRepository<CoffeeOrder, Long> {
 
-public interface OrderRepository extends JpaRepository<Order, Long> {
-
-    //Optional<Order> findById(Long aLong);
+    //Optional<CoffeeOrder> findById(Long aLong);
 }
