@@ -54,36 +54,25 @@ public class CanvasController {
         return departmentsToBind;
     }
 
-
-    /**
-     * Find one Canvas so the admin can edit it
-     *
-     * @param id
-     * @return Canvas
-     */
     @GetMapping("/{id}")
     public Optional<Canvas> findById(@PathVariable(value = "id") final long id) {
         return canvasRepository.findById(id);
     }
 
-    /**
-     * Find the Canvas based on the department the user is in
-     *
-     * @param department
-     * @return Canvas
-     */
     @GetMapping("/department/{department}")
     public Canvas findByDepartmentName(@PathVariable(value = "department") final String department) {
 
-        return  canvasRepository.findByDepartment_Name(department);
+        return canvasRepository.findByDepartment_Name(department);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update")
-    public ApiResponse update(@RequestBody final Canvas canvas) {
+    public Canvas update(@RequestBody final Canvas canvas) {
 
         return canvasService.update(canvas);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/new")
     public Canvas create(@RequestBody final Canvas canvas) {
 
@@ -94,5 +83,14 @@ public class CanvasController {
         canvas.setCoffeeMachine(null);
 
         return canvasRepository.save(canvas);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/chair")
+    public ApiResponse deleteChairFromCanvas(
+            @RequestParam(value = "chairId") final long chairId,
+            @RequestParam(value = "canvasId") final long canvasId) {
+
+        return canvasService.removeChair(chairId, canvasId);
     }
 }

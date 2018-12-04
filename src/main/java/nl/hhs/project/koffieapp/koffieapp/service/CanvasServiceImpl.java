@@ -24,10 +24,8 @@ public class CanvasServiceImpl implements CanvasService {
     private UserRepository userRepository;
 
     @Override
-    public ApiResponse update(Canvas canvas) {
+    public Canvas update(Canvas canvas) {
 
-        boolean success = true;
-        String returnMessage = "Canvas updated";
         Canvas canvasToUpdate = canvasRepository.getOne(canvas.getId());
 
         canvasToUpdate.setDescription(canvas.getDescription());
@@ -35,27 +33,31 @@ public class CanvasServiceImpl implements CanvasService {
         canvasToUpdate.setCoffeeMachine(null);
 
         for (Chair chair : canvas.getChairs()) {
-
-            if (isNewChair(chair)) {
-                chairRepository.save(chair);
-                canvasToUpdate.addChair(chair);
-            }
-
-            else if (hasNoUser(chair)) {
-                chairRepository.save(chair);
-            }
-
-            else {
-                if (canBindUserToChair(chair)) {
-                    chairRepository.save(chair);
-
-                } else {
-                    success = false;
-                    returnMessage = "";
-                }
-            }
+            createOrUpdateChair(chair, canvasToUpdate);
         }
+
         canvasRepository.save(canvasToUpdate);
+        return canvasToUpdate;
+    }
+
+    @Override
+    public ApiResponse removeChair(long chairId, long canvasId) {
+
+        boolean success = true;
+        String returnMessage = "";
+
+        try {
+            Chair chair = chairRepository.getOne(chairId);
+            Canvas canvas = canvasRepository.getOne(canvasId);
+            canvas.removeChair(chair);
+            canvasRepository.save(canvas);
+            chairRepository.delete(chair);
+
+            returnMessage += "Removed chair " + chairId + " from canvas " + canvasId;
+        } catch (Exception e) {
+            success = false;
+            returnMessage += e;
+        }
         return new ApiResponse(success, returnMessage);
     }
 
@@ -65,6 +67,20 @@ public class CanvasServiceImpl implements CanvasService {
 
     private boolean hasNoUser(Chair chair) {
         return chair.getUser() == null;
+    }
+
+    private void createOrUpdateChair(Chair chair, Canvas canvasToUpdate) {
+
+        if (isNewChair(chair)) {
+            chairRepository.save(chair);
+            canvasToUpdate.addChair(chair);
+        } else if (hasNoUser(chair)) {
+            chairRepository.save(chair);
+        } else {
+            if (canBindUserToChair(chair)) {
+                chairRepository.save(chair);
+            }
+        }
     }
 
     private boolean canBindUserToChair(Chair chair) {

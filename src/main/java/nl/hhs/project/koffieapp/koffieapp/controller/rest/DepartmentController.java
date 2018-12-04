@@ -1,10 +1,12 @@
 package nl.hhs.project.koffieapp.koffieapp.controller.rest;
 
 import nl.hhs.project.koffieapp.koffieapp.model.Canvas.Canvas;
+import nl.hhs.project.koffieapp.koffieapp.model.Canvas.Chair;
 import nl.hhs.project.koffieapp.koffieapp.model.Department;
 import nl.hhs.project.koffieapp.koffieapp.model.User;
 import nl.hhs.project.koffieapp.koffieapp.model.payload.ApiResponse;
 import nl.hhs.project.koffieapp.koffieapp.repository.CanvasRepository;
+import nl.hhs.project.koffieapp.koffieapp.repository.ChairRepository;
 import nl.hhs.project.koffieapp.koffieapp.repository.DepartmentRepository;
 import nl.hhs.project.koffieapp.koffieapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +35,12 @@ public class DepartmentController {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private DepartmentRepository departmentRepository;
-
     @Autowired
     private CanvasRepository canvasRepository;
+    @Autowired
+    private ChairRepository chairRepository;
 
     /**
      * Only get users that are not in a department
@@ -92,6 +94,19 @@ public class DepartmentController {
             @RequestParam(value = "user") final Long userId) {
 
         User user = userRepository.getOne(userId);
+
+        // check if user is bound to chair
+        Canvas canvas = canvasRepository.findByDepartment_Name(user.getDepartment().getName());
+        for (Chair chair : canvas.getChairs()) {
+            if (chair.getUser() == null) {
+                continue;
+            }
+            else if (chair.getUser().getId() == user.getId()) {
+                // remove user from chair
+                chair.setUser(null);
+                chairRepository.save(chair);
+            }
+        }
         user.setDepartment(null);
         userRepository.save(user);
         return new ResponseEntity<>(HttpStatus.OK);
