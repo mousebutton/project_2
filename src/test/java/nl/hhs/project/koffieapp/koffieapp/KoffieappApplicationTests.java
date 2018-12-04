@@ -1,6 +1,5 @@
 package nl.hhs.project.koffieapp.koffieapp;
 
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -16,9 +15,6 @@ public class KoffieappApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
-
-
 
 
 }
