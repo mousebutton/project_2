@@ -13,7 +13,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -123,6 +122,11 @@ public class UserServiceImpl implements UserService {
         User toUpdate = userRepository.getOne(userDTO.getId());
         toUpdate.setAvatar(userDTO.getAvatar());
         return userRepository.save(toUpdate);
+    }
+
+    @Override
+    public User findById(long id) {
+        return userRepository.getOne(id);
     }
 
     /**

@@ -24,19 +24,19 @@ public class ChatMessageEndpoint {
      * @return
      * @throws Exception
      */
+
     @SendTo("/global-message/chat")
     @MessageMapping("chat-message")
     public String sendChatMessage(String content) throws Exception {
         Thread.sleep(1000);
         String[] data = content.split("%");
-        String token = data[1];
-        String userName = jwtTokenProvider.getUsername(token);
+        String userName = jwtTokenProvider.getUsername(data[1]);
         return userName + ": " + data[0];
     }
 
     @SendTo("/global-message/notification")
-    @MessageMapping("coffee-order")
-    public String newCoffeeOrder(String content) throws Exception {
+    @MessageMapping("notification")
+    public String notification(String content) throws Exception {
         Thread.sleep(1000);
 
         return "";

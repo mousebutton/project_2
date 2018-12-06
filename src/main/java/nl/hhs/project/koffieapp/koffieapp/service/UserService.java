@@ -14,4 +14,5 @@ public interface UserService {
     void pushNewUserOnlineNotification(User user);
     User update(UserDTO userDTO);
     User updateAvatar(UserDTO userDTO);
+    User findById(long id);
 }
