@@ -1,9 +1,7 @@
 package nl.hhs.project.koffieapp.koffieapp.controller.rest;
 
-import nl.hhs.project.koffieapp.koffieapp.model.CoffeeOrder;
-import nl.hhs.project.koffieapp.koffieapp.model.CoffeeRequest;
-import nl.hhs.project.koffieapp.koffieapp.model.User;
-import nl.hhs.project.koffieapp.koffieapp.model.UserDTO;
+import nl.hhs.project.koffieapp.koffieapp.model.*;
+import nl.hhs.project.koffieapp.koffieapp.repository.DepartmentRepository;
 import nl.hhs.project.koffieapp.koffieapp.repository.OrderRepository;
 import nl.hhs.project.koffieapp.koffieapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +29,9 @@ public class UserController {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     @Autowired
     private SimpMessagingTemplate template;
@@ -66,6 +67,14 @@ public class UserController {
                         LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))));
 
         return orderRepository.save(coffeeOrder);
+    }
+
+    @GetMapping(value = "/getRequests/{departmentId}")
+    public List<CoffeeOrder> getCoffeeRequestsByDepartment(
+            @PathVariable(value = "departmentId") final  String departmentId) {
+        Department department = departmentRepository.findAllByNameEquals(departmentId);
+        List<CoffeeOrder> orders = orderRepository.findAllByUserDepartmentAndFinishedIsFalse(department);
+        return orders;
     }
 
     @PostMapping("/avatar")

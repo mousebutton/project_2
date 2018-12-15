@@ -1,9 +1,11 @@
 package nl.hhs.project.koffieapp.koffieapp.repository;
 
 import nl.hhs.project.koffieapp.koffieapp.model.CoffeeOrder;
+import nl.hhs.project.koffieapp.koffieapp.model.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderRepository extends JpaRepository<CoffeeOrder, Long> {
+import java.util.List;
 
-    //Optional<CoffeeOrder> findById(Long aLong);
+public interface OrderRepository extends JpaRepository<CoffeeOrder, Long> {
+    List<CoffeeOrder> findAllByUserDepartmentAndFinishedIsFalse(Department department);
 }

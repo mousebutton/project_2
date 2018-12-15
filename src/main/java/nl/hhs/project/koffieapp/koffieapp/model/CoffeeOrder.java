@@ -2,6 +2,7 @@ package nl.hhs.project.koffieapp.koffieapp.model;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,5 +25,8 @@ public class CoffeeOrder {
 
     @CreationTimestamp
     private LocalDateTime orderDate;
+
+    @Value("false")
+    private boolean finished;
 
 }
