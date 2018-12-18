@@ -69,7 +69,6 @@ public class DepartmentController {
     @PostMapping("/add")
     public Department addDepartment(
             @RequestParam(value = "departmentName", required = false) final String departmentName) {
-
         return departmentRepository.save(new Department(departmentName));
     }
 
@@ -77,10 +76,8 @@ public class DepartmentController {
     public ApiResponse addUserToDepartment(
             @RequestParam(value = "email") final String email,
             @RequestParam(value = "department") final long departmentId) {
-
         Optional<User> user = userRepository.findUserByEmail(email);
         Department department = departmentRepository.getOne(departmentId);
-
         return user.map((u) -> {
             u.setDepartment(department);
             userRepository.save(u);
@@ -92,16 +89,13 @@ public class DepartmentController {
     @DeleteMapping("/deleteUser")
     public ResponseEntity<String> deleteUserFromDepartment(
             @RequestParam(value = "user") final Long userId) {
-
         User user = userRepository.getOne(userId);
-
         // check if user is bound to chair
         Canvas canvas = canvasRepository.findByDepartment_Name(user.getDepartment().getName());
         for (Chair chair : canvas.getChairs()) {
             if (chair.getUser() == null) {
                 continue;
-            }
-            else if (chair.getUser().getId() == user.getId()) {
+            } else if (chair.getUser().getId() == user.getId()) {
                 // remove user from chair
                 chair.setUser(null);
                 chairRepository.save(chair);
@@ -121,10 +115,8 @@ public class DepartmentController {
     @DeleteMapping("/delete/{id}")
     public ApiResponse deleteDepartment(
             @PathVariable(value = "id") final long id) {
-
         Department department = departmentRepository.getOne(id);
         Canvas canvas = canvasRepository.findByDepartment_Name(department.getName());
-
         if (canvas == null) {
             // safe to delete
             departmentRepository.delete(department);

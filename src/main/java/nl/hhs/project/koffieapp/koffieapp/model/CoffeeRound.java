@@ -1,33 +1,30 @@
 package nl.hhs.project.koffieapp.koffieapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
-public class CoffeeOrder {
+@NoArgsConstructor
+public class CoffeeRound {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "order_id")
+    @Column(name = "coffee_round_id")
     private long id;
 
     @ManyToOne
     private User user;
 
-    private Boolean sugar;
-    private Boolean milk;
-    private String coffeeType;
+    @OneToMany
+    private List<CoffeeOrder> orders;
 
     @CreationTimestamp
     private LocalDateTime orderDate;
-
-    @Value("false")
-    private boolean finished;
 
 }

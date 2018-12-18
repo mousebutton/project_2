@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<CoffeeOrder, Long> {
-    List<CoffeeOrder> findAllByUserDepartmentAndFinishedIsFalse(Department department);
+    List<CoffeeOrder> findAllByUserDepartmentAndFinishedIsFalseOrderByIdAsc(Department department);
 }
