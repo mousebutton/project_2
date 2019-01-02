@@ -27,3 +27,4 @@ application.properties
 /nbdist/
 /.nb-gradle/
 
+/src/main/resources/static/
