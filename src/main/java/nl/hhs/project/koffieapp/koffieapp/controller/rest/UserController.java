@@ -83,7 +83,7 @@ public class UserController {
         List<CoffeeOrder> orders = new ArrayList<>();
         CoffeeRound coffeeRound = new CoffeeRound();
         coffeeRound.setUser(user);
-        // Set orders to finished and all to the CoffeeRound
+        // Update CoffeeOrders to finished and add to the CoffeeRound
         for (long orderId : orderIds) {
             CoffeeOrder coffeeOrder = orderRepository.getOne(orderId);
             coffeeOrder.setFinished(true);
