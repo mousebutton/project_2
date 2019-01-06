@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/users")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://ec2-18-191-130-224.us-east-2.compute.amazonaws.com:4200")
 @PreAuthorize("hasAnyRole('USER','ADMIN')")
 public class UserController {
 

@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/canvas")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://ec2-18-191-130-224.us-east-2.compute.amazonaws.com:4200")
 public class CanvasController {
 
     @Autowired
