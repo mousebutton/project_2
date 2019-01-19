@@ -17,7 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -73,15 +75,27 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(user.getEmail())) {
             return false;
         }
+
+        List<Role> roles = new ArrayList();
+
         User newUser = new User(user);
-        System.out.println(user);
+
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Role userRole = roleRepository.findByRole("USER")
                 .orElseThrow(() -> new AppException("User Role not set."));
-        newUser.setRoles(Arrays.asList(userRole));
+        roles.add(userRole);
 
+        newUser.setRoles(roles);
         userRepository.save(newUser);
+
+        if (user.getAdminRole() == "true") {
+            Role adminRole = roleRepository.findByRole("ADMIN")
+                    .orElseThrow(() -> new AppException("User Role not set."));
+            roles.add(adminRole);
+            newUser.setRoles(roles);
+            userRepository.save(newUser);
+        }
         return true;
     }
 
