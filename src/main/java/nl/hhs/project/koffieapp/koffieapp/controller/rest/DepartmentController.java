@@ -29,7 +29,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/admin/departments")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://ec2-18-191-130-224.us-east-2.compute.amazonaws.com:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @PreAuthorize("hasRole('ADMIN')")
 public class DepartmentController {
 

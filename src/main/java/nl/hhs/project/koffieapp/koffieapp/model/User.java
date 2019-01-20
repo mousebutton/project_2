@@ -25,6 +25,8 @@ public class User {
 
     private String lastName;
 
+    private String adminRole;
+
     @Lob
     private String avatar;
 
@@ -43,6 +45,7 @@ public class User {
         this.email = byEMail.getEmail();
         this.password = byEMail.getPassword();
         this.roles = byEMail.getRoles();
+        this.adminRole = byEMail.getAdminRole();
     }
 
 }
