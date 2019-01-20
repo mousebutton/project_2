@@ -15,5 +15,6 @@ public class Drink {
     @Column(name = "id")
     private long id;
     private String name;
+    @Lob
     private String imageUrl;
 }

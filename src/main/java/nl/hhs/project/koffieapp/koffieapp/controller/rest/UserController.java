@@ -96,6 +96,7 @@ public class UserController {
         return coffeeRoundRepository.save(coffeeRound);
     }
 
+
     @PostMapping("/avatar")
     public UserDTO uploadNewAvatar(@RequestBody UserDTO userDTO) {
         return new UserDTO(userService.updateAvatar(userDTO));

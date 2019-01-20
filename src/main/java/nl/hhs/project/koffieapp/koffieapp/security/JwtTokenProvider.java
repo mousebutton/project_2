@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private String SECRET = "secret";
-    private final long tokenExpiresInMS = 86_400_000; // 1 day
+    private final long tokenExpiresInMS = 1_860_400_000;
 
     @PostConstruct
     protected void init() {
@@ -31,6 +31,7 @@ public class JwtTokenProvider {
     }
 
     /**
+     *
      * Create Jwt Token based on the email of the user and his roles.
      * @param email
      * @param roles

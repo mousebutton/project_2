@@ -16,15 +16,24 @@ public class DrinkController {
     @Autowired
     private DrinkRepository drinkRepository;
 
-//    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping(value = "/all")
     public List<Drink> findAllDrinks(){
+
         return drinkRepository.findAllByOrderByNameAsc();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/add")
     public Drink addDrink(@RequestBody final Drink drink){
+        System.out.println(drink);
         return drinkRepository.save(drink);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping(value = "/delete")
+    public void removeDrink(@RequestParam final long drinkId){
+        System.out.println(drinkId);
+        drinkRepository.delete(drinkRepository.getOne(drinkId));
     }
 }
