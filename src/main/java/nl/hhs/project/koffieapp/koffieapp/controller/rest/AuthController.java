@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/auth")
 @CrossOrigin(origins = "http://ec2-18-191-130-224.us-east-2.compute.amazonaws.com:4200")
 //@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "${co.url}")
 class AuthController {
 
 
